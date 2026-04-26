@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body, #root {
+    min-height: 100vh;
+    background-color: #09090b;
+    color: #fafafa;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #18181b;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #06b6d4;
+  }
+
+  ::selection {
+    background: rgba(6, 182, 212, 0.3);
+    color: #fafafa;
+  }
+}
+
+@layer components {
+  .pg-card {
+    @apply bg-pg-card border border-pg-border rounded-xl overflow-hidden;
+  }
+
+  .pg-input {
+    @apply bg-pg-surface border border-pg-border rounded-lg px-4 py-3
+           text-pg-text placeholder-pg-muted font-mono text-sm
+           focus:outline-none focus:border-pg-cyan focus:ring-1 focus:ring-pg-cyan/30
+           transition-all duration-200;
+  }
+
+  .pg-btn-primary {
+    @apply bg-pg-cyan text-pg-bg font-display font-bold uppercase tracking-widest text-xs
+           px-6 py-3 rounded-lg
+           hover:shadow-glow-cyan hover:scale-105
+           active:scale-95
+           transition-all duration-200
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none;
+  }
+
+  .pg-btn-secondary {
+    @apply border border-pg-border text-pg-sub font-body text-sm
+           px-4 py-2 rounded-lg
+           hover:border-pg-cyan/50 hover:text-pg-text
+           transition-all duration-200;
+  }
+
+  .pg-label {
+    @apply font-display font-semibold text-xs uppercase tracking-widest text-pg-sub;
+  }
+
+  .glow-text-cyan {
+    text-shadow: 0 0 10px rgba(6, 182, 212, 0.8), 0 0 30px rgba(6, 182, 212, 0.4);
+  }
+
+  .glow-text-violet {
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 30px rgba(139, 92, 246, 0.4);
+  }
+
+  .glass-overlay {
+    @apply absolute inset-0 z-10 rounded-xl;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background: rgba(9, 9, 11, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .noise-bg::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    z-index: 9999;
+  }
+
+  .toggle-switch {
+    @apply relative inline-flex items-center cursor-pointer;
+  }
+  .toggle-switch input { @apply sr-only; }
+  .toggle-track {
+    @apply w-10 h-5 bg-pg-border rounded-full transition-colors duration-200;
+  }
+  .toggle-track.active { @apply bg-pg-cyan; }
+  .toggle-thumb {
+    @apply absolute left-0.5 top-0.5 w-4 h-4 bg-pg-bg rounded-full shadow transition-transform duration-200;
+  }
+  .toggle-thumb.active { @apply translate-x-5; }
+}
+
+/* Scan line animation for cards */
+.scan-line-container {
+  position: relative;
+  overflow: hidden;
+}
+.scan-line-container::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(6,182,212,0.6), transparent);
+  animation: scan 3s linear infinite;
+  pointer-events: none;
+}
+
+/* Terminal cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink::after {
+  content: '▋';
+  color: #06b6d4;
+  animation: blink 1s step-end infinite;
+}
+
+/* Chart bar animation */
+@keyframes growUp {
+  from { height: 0; }
+  to   { height: var(--bar-height); }
+}
